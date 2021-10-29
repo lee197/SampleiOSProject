@@ -8,25 +8,41 @@
 import Foundation
 
 class LotteryDetailViewModel {
-    private let apiClient: LotteryInfoFetchable
     var showAlertClosure: (()->())?
-    var alertMessage: String? {
+    var updateDetailViewClosure: (()->())?
+    
+    private let apiClient: LotteryInfoFetchable
+    private let lotteryCalculator: LotteryCalculatorProtocol
+    private var alertMessage: String? {
         didSet {
             showAlertClosure?()
         }
     }
-    
-    init(apiClient:LotteryInfoFetchable = LotteryRepository()) {
+    private var lotteryDetailModel: LotteryDetailModel? {
+        didSet {
+            updateDetailViewClosure?()
+        }
+    }
+
+
+    init(apiClient:LotteryInfoFetchable = LotteryRepository(),
+         lotteryCalculator: LotteryCalculatorProtocol = LotteryCalculator()) {
         self.apiClient = apiClient
+        self.lotteryCalculator = lotteryCalculator
     }
     
-    func initFetch() {
-        apiClient.fetchLotteryDetails { [weak self] result in
+    func initDetailFetch(ticketNumber: String) {
+        apiClient.fetchLotteryDetails(with: ticketNumber) { [weak self] result in
             guard let self = self else { return }
-            do {
-                let interests = try result.get()
-            
-            } catch {
+            switch result {
+            case .success(let lottery):
+                do {
+                    let value = try self.lotteryCalculator.findLotteryAmount(numbers: lottery.numbers)
+                    self.lotteryDetailModel = LotteryDetailModel(id: lottery.id, result: String(value))
+                } catch {
+                    self.alertMessage = UserAlertError.unknownError.rawValue
+                }
+            case .failure(_ ):
                 self.alertMessage = UserAlertError.serverError.rawValue
             }
         }

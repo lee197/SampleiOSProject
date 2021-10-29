@@ -26,7 +26,7 @@ class LotteryListViewController: UIViewController {
             }
         }
         
-        lotteryListViewModel.initDetailFetch()
+        lotteryListViewModel.initListFetch()
     }
     
     private func showAlert(alertMessage:String) {
@@ -34,7 +34,5 @@ class LotteryListViewController: UIViewController {
         alert.addAction( UIAlertAction(title: "Ok", style: .cancel, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-
-
 }
 

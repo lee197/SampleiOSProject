@@ -16,8 +16,8 @@ enum APIError: Error {
 }
 
 protocol LotteryInfoFetchable {
-    func fetchLotteryList(complete completionHandler: @escaping (Result<LotteryListModel, APIError>) -> Void)
-    func fetchLotteryDetails(ticketNumber: String, complete completionHandler: @escaping (Result<LotteryDetailModel, APIError>) -> Void)
+    func fetchLotteryList(complete completionHandler: @escaping (Result<LotteryListAPIModel, APIError>) -> Void)
+    func fetchLotteryDetails(with ticketNumber: String, complete completionHandler: @escaping (Result<LotteryDetailAPIModel, APIError>) -> Void)
 }
 
 class LotteryRepository {
@@ -30,7 +30,7 @@ class LotteryRepository {
 
 extension LotteryRepository: LotteryInfoFetchable {
     
-    func fetchLotteryList(complete completionHandler: @escaping (Result<LotteryListModel, APIError>) -> Void) {
+    func fetchLotteryList(complete completionHandler: @escaping (Result<LotteryListAPIModel, APIError>) -> Void) {
         guard let url = makeLotteryListComponents().url else {
             let error = APIError.httpError(description: "Couldn't create URL")
             completionHandler(.failure(error))
@@ -55,7 +55,7 @@ extension LotteryRepository: LotteryInfoFetchable {
             
             let decoder = JSONDecoder()
             do{
-                let value = try decoder.decode(LotteryListModel.self, from: data)
+                let value = try decoder.decode(LotteryListAPIModel.self, from: data)
                 completionHandler(.success(value))
             }catch{
                 completionHandler(.failure(.dataDecodingError))
@@ -63,7 +63,7 @@ extension LotteryRepository: LotteryInfoFetchable {
         }.resume()
     }
     
-    func fetchLotteryDetails(ticketNumber: String, complete completionHandler: @escaping (Result<LotteryDetailModel, APIError>) -> Void) {
+    func fetchLotteryDetails(with ticketNumber: String, complete completionHandler: @escaping (Result<LotteryDetailAPIModel, APIError>) -> Void) {
         guard let url = makeLotteryDetailComponents(ticketNumber).url else {
             let error = APIError.httpError(description: "Couldn't create URL")
             completionHandler(.failure(error))
@@ -88,7 +88,7 @@ extension LotteryRepository: LotteryInfoFetchable {
             
             let decoder = JSONDecoder()
             do{
-                let value = try decoder.decode(LotteryDetailModel.self, from: data)
+                let value = try decoder.decode(LotteryDetailAPIModel.self, from: data)
                 completionHandler(.success(value))
             }catch{
                 completionHandler(.failure(.dataDecodingError))

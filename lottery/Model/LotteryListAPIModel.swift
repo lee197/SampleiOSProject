@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - LotteryListModel
-struct LotteryListModel: Codable {
+struct LotteryListAPIModel: Codable {
     let tickets: [Ticket]
 }
 

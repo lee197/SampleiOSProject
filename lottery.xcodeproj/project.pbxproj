@@ -23,8 +23,10 @@
 		A1C96E9F272C0DCD00EE9917 /* LotteryListViewModelUnitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C96E9E272C0DCD00EE9917 /* LotteryListViewModelUnitTest.swift */; };
 		A1C96EA1272C0DF400EE9917 /* LotteryDetailViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C96EA0272C0DF400EE9917 /* LotteryDetailViewModelTest.swift */; };
 		A1C96EA3272C0E2A00EE9917 /* LotteryCalculatorUnitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C96EA2272C0E2A00EE9917 /* LotteryCalculatorUnitTest.swift */; };
-		A1C96EA6272C0EB000EE9917 /* LotteryListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C96EA5272C0EB000EE9917 /* LotteryListModel.swift */; };
-		A1C96EA8272C0EC300EE9917 /* LotteryDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C96EA7272C0EC300EE9917 /* LotteryDetailModel.swift */; };
+		A1C96EA6272C0EB000EE9917 /* LotteryListAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C96EA5272C0EB000EE9917 /* LotteryListAPIModel.swift */; };
+		A1C96EA8272C0EC300EE9917 /* LotteryDetailAPIModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C96EA7272C0EC300EE9917 /* LotteryDetailAPIModel.swift */; };
+		A1C96EAA272C4D0400EE9917 /* LotteryDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C96EA9272C4D0400EE9917 /* LotteryDetailModel.swift */; };
+		A1C96EAC272C597600EE9917 /* MockLotteryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C96EAB272C597600EE9917 /* MockLotteryRepository.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,8 +67,10 @@
 		A1C96E9E272C0DCD00EE9917 /* LotteryListViewModelUnitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LotteryListViewModelUnitTest.swift; sourceTree = "<group>"; };
 		A1C96EA0272C0DF400EE9917 /* LotteryDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LotteryDetailViewModelTest.swift; sourceTree = "<group>"; };
 		A1C96EA2272C0E2A00EE9917 /* LotteryCalculatorUnitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LotteryCalculatorUnitTest.swift; sourceTree = "<group>"; };
-		A1C96EA5272C0EB000EE9917 /* LotteryListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LotteryListModel.swift; sourceTree = "<group>"; };
-		A1C96EA7272C0EC300EE9917 /* LotteryDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LotteryDetailModel.swift; sourceTree = "<group>"; };
+		A1C96EA5272C0EB000EE9917 /* LotteryListAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LotteryListAPIModel.swift; sourceTree = "<group>"; };
+		A1C96EA7272C0EC300EE9917 /* LotteryDetailAPIModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LotteryDetailAPIModel.swift; sourceTree = "<group>"; };
+		A1C96EA9272C4D0400EE9917 /* LotteryDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LotteryDetailModel.swift; sourceTree = "<group>"; };
+		A1C96EAB272C597600EE9917 /* MockLotteryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLotteryRepository.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +142,7 @@
 				A1C96E9E272C0DCD00EE9917 /* LotteryListViewModelUnitTest.swift */,
 				A1C96EA0272C0DF400EE9917 /* LotteryDetailViewModelTest.swift */,
 				A1C96EA2272C0E2A00EE9917 /* LotteryCalculatorUnitTest.swift */,
+				A1C96EAB272C597600EE9917 /* MockLotteryRepository.swift */,
 			);
 			path = lotteryTests;
 			sourceTree = "<group>";
@@ -188,8 +193,9 @@
 		A1C96EA4272C0E8E00EE9917 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A1C96EA5272C0EB000EE9917 /* LotteryListModel.swift */,
-				A1C96EA7272C0EC300EE9917 /* LotteryDetailModel.swift */,
+				A1C96EA5272C0EB000EE9917 /* LotteryListAPIModel.swift */,
+				A1C96EA7272C0EC300EE9917 /* LotteryDetailAPIModel.swift */,
+				A1C96EA9272C4D0400EE9917 /* LotteryDetailModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -329,12 +335,13 @@
 				A1C96E8F272C09B800EE9917 /* LotteryListViewModel.swift in Sources */,
 				A1C96E61272C092300EE9917 /* LotteryListViewController.swift in Sources */,
 				A1C96E95272C0BF200EE9917 /* LotteryDetailViewController.swift in Sources */,
-				A1C96EA8272C0EC300EE9917 /* LotteryDetailModel.swift in Sources */,
+				A1C96EA8272C0EC300EE9917 /* LotteryDetailAPIModel.swift in Sources */,
 				A1C96E5D272C092300EE9917 /* AppDelegate.swift in Sources */,
 				A1C96E91272C0A9800EE9917 /* LotteryRepository.swift in Sources */,
+				A1C96EAA272C4D0400EE9917 /* LotteryDetailModel.swift in Sources */,
 				A1C96E5F272C092300EE9917 /* SceneDelegate.swift in Sources */,
 				A1C96E8D272C09A700EE9917 /* LotteryCalculator.swift in Sources */,
-				A1C96EA6272C0EB000EE9917 /* LotteryListModel.swift in Sources */,
+				A1C96EA6272C0EB000EE9917 /* LotteryListAPIModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +352,7 @@
 				A1C96EA3272C0E2A00EE9917 /* LotteryCalculatorUnitTest.swift in Sources */,
 				A1C96EA1272C0DF400EE9917 /* LotteryDetailViewModelTest.swift in Sources */,
 				A1C96E9F272C0DCD00EE9917 /* LotteryListViewModelUnitTest.swift in Sources */,
+				A1C96EAC272C597600EE9917 /* MockLotteryRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

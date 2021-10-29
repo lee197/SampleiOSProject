@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct LotteryDetailModel: Codable {
+// MARK: - LotteryDetailModel
+struct LotteryDetailAPIModel: Codable {
     let id: Int
-    let result: String
+    let numbers: [Int]
 }

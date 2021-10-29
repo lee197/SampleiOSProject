@@ -11,7 +11,11 @@ enum LotteryRuleError: Error {
     case valuesCountError
 }
 
-class LotteryCalculator {
+protocol LotteryCalculatorProtocol {
+    func findLotteryAmount(numbers: [Int]) throws -> Int
+}
+
+class LotteryCalculator: LotteryCalculatorProtocol {
     
     func findLotteryAmount(numbers: [Int]) throws -> Int {
         if numbers.count != 3 {

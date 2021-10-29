@@ -52,26 +52,3 @@ class LotteryCalculatorUnitTest: XCTestCase {
         }
     }
 }
-
-class MockNumbers {
-    
-    func fiveEuroLottery() -> [Int] {
-        return [1,1,1]
-    }
-    
-    func tenEuroLottery() -> [Int] {
-        return [1,1,0]
-    }
-    
-    func oneEuroLottery() -> [Int] {
-        return [2,1,0]
-    }
-    
-    func zeroLottery() -> [Int] {
-        return [1,1,2]
-    }
-    
-    func corruptDataLottery() -> [Int] {
-        return [1,1]
-    }
-}

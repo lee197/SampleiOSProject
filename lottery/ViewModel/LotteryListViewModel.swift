@@ -10,14 +10,22 @@ import Foundation
 enum UserAlertError:  String, Error {
     case userError = "Please make sure your network is working fine or re-launch the app"
     case serverError = "Please wait a while and re-launch the app"
+    case unknownError = "Please try other items"
 }
 
 class LotteryListViewModel {
-    private let apiClient: LotteryInfoFetchable
     var showAlertClosure: (()->())?
-    var alertMessage: String? {
+    var reloadTableViewClosure: (()->())?
+    
+    private let apiClient: LotteryInfoFetchable
+    private var alertMessage: String? {
         didSet {
             showAlertClosure?()
+        }
+    }
+    private var cellViewModels: [Int] = [] {
+        didSet {
+            reloadTableViewClosure?()
         }
     }
     
@@ -28,24 +36,20 @@ class LotteryListViewModel {
     func initListFetch() {
         apiClient.fetchLotteryList { [weak self] result in
             guard let self = self else { return }
-            do {
-                let interests = try result.get()
-            
-            } catch {
+            switch result {
+            case .success(let lotteries):
+                self.cellViewModels = lotteries.tickets.map{ $0.id }
+            case .failure(_ ):
                 self.alertMessage = UserAlertError.serverError.rawValue
             }
         }
     }
     
-    func initDetailFetch() {
-        apiClient.fetchLotteryDetails(ticketNumber: "1") { [weak self] result in
-            guard let self = self else { return }
-            do {
-                let interests = try result.get()
-            
-            } catch {
-                self.alertMessage = UserAlertError.serverError.rawValue
-            }
-        }
+    func getNumberOfCells() -> Int {
+        return cellViewModels.count
+    }
+    
+    func getCellViewModel( at indexPath: IndexPath ) -> Int {
+        return cellViewModels[indexPath.row]
     }
 }

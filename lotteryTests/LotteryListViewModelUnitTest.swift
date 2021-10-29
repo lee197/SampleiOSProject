@@ -6,20 +6,24 @@
 //
 
 import XCTest
+@testable import lottery
 
 class LotteryListViewModelUnitTest: XCTestCase {
-
+    var sut: LotteryListViewModel!
+    var mocks: MockLotteryRepository!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        sut = LotteryListViewModel()
+        mocks = MockLotteryRepository()
     }
-
+    
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        sut = nil
+        mocks = nil
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
+    
+    func testFetchLotteryListSucceed() {}
+    
+    func testFetchLotteryListFailed() {}
 
 }
