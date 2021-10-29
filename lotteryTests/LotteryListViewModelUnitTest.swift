@@ -1,14 +1,13 @@
 //
-//  lotteryTests.swift
+//  LotteryListViewModelUnitTest.swift
 //  lotteryTests
 //
 //  Created by Jason Lee on 29/10/2021.
 //
 
 import XCTest
-@testable import lottery
 
-class lotteryTests: XCTestCase {
+class LotteryListViewModelUnitTest: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
