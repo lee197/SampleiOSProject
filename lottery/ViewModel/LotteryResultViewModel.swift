@@ -13,6 +13,8 @@ class LotteryResultViewModel {
     var ticketNumber: Int?
     private let apiClient: LotteryInfoFetchable
     private let lotteryCalculator: LotteryCalculatorProtocol
+    private let userDefault: UserDefaults
+
     private var alertMessage: String? {
         didSet {
             showAlertClosure?(alertMessage)
@@ -25,9 +27,11 @@ class LotteryResultViewModel {
     }
 
     init(apiClient:LotteryInfoFetchable = LotteryRepository(),
-         lotteryCalculator: LotteryCalculatorProtocol = LotteryCalculator()) {
+         lotteryCalculator: LotteryCalculatorProtocol = LotteryCalculator(),
+         userDefault: UserDefaults = UserDefaults.standard) {
         self.apiClient = apiClient
         self.lotteryCalculator = lotteryCalculator
+        self.userDefault = userDefault
     }
     
     func initResultFetch(ticketNumber: String) {
@@ -38,6 +42,8 @@ class LotteryResultViewModel {
                 do {
                     let value = try self.lotteryCalculator.findLotteryAmount(numbers: lottery.numbers)
                     self.lotteryResultModel = LotteryResultModel(id: lottery.id, result: String(value))
+                    let oldTotal = self.userDefault.integer(forKey: "totalAmount")
+                    self.userDefault.set(oldTotal + value, forKey: "totalAmount")
                 } catch {
                     self.alertMessage = UserAlertError.unknownError.rawValue
                 }

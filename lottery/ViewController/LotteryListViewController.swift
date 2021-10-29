@@ -35,6 +35,10 @@ class LotteryListViewController: UIViewController {
         setupTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        lotteryListViewModel.updateTotalAmount()
+    }
+    
     override open var shouldAutorotate: Bool {
        return false
     }
@@ -44,7 +48,7 @@ class LotteryListViewController: UIViewController {
     }
     
     private func setupTableView() {
-        self.title = "lotteries"
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -65,6 +69,14 @@ class LotteryListViewController: UIViewController {
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+            }
+        }
+        
+        lotteryListViewModel.refreshTotalAmount = { [weak self] amount in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                self.title = "Total amount: \(amount)"
             }
         }
         
