@@ -16,9 +16,9 @@ enum UserAlertError:  String, Error {
 class LotteryListViewModel {
     var showAlertClosure: ((_ alertMessage: String?)->())?
     var reloadTableViewClosure: ((_ cellViewModels: [Int])->())?
-    var cellViewModels: [Int] = [] {
+    var LotteryNnumbers: [Int] = [] {
         didSet {
-            reloadTableViewClosure?(cellViewModels)
+            reloadTableViewClosure?(LotteryNnumbers)
         }
     }
     
@@ -39,7 +39,7 @@ class LotteryListViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let lotteries):
-                self.cellViewModels = lotteries.tickets.map{ $0.id }
+                self.LotteryNnumbers = lotteries.tickets.map{ $0.id }
             case .failure(_ ):
                 self.alertMessage = UserAlertError.serverError.rawValue
             }

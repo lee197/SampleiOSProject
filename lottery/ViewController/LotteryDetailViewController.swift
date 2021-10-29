@@ -8,14 +8,21 @@
 import UIKit
 
 class LotteryDetailViewController: UIViewController {
-    let lotteryDetailViewModel: LotteryDetailViewModel
-    var ticketNumber = 0
-    init(lotteryDetailViewModel: LotteryDetailViewModel) {
-        self.lotteryDetailViewModel = lotteryDetailViewModel
-        super.init(nibName: nil, bundle: nil)
+    let lotteryDetailViewModel = LotteryDetailViewModel()
+    var ticketNumber: Int?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initViewModel()
+        setupDetailView()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    private func setupDetailView() {
+        
     }
+    
+    private func initViewModel() {
+        
+    }
+
 }
