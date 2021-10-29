@@ -6,27 +6,45 @@
 //
 
 import XCTest
+@testable import lottery
 
 class LotteryDetailViewModelTest: XCTestCase {
-
+    var sut: LotteryDetailViewModel!
+    var mocks: MockLotteryRepository!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        mocks = MockLotteryRepository()
+        sut = LotteryDetailViewModel.init(apiClient: mocks, lotteryCalculator: LotteryCalculator())
     }
-
+    
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        sut = nil
+        mocks = nil
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testFetchLotteryDetailSucceed() {
+        mocks.IsFetchLotteryDetailSucceeded = true
+        let expect = XCTestExpectation(description: "fetch successfully")
+        sut.updateDetailViewClosure = { info in
+            expect.fulfill()
+            XCTAssertEqual(info!.id, 1)
+            XCTAssertEqual(info!.result, "10")
         }
+        
+        sut.initDetailFetch(ticketNumber: "1")
+        wait(for: [expect], timeout: 1.0)
     }
-
+    
+    func testFetchLotteryDetailFailed() {
+        mocks.IsFetchLotteryDetailSucceeded = false
+        let expect = XCTestExpectation(description: "fetch failed")
+        sut.showAlertClosure = { alert in
+            expect.fulfill()
+            XCTAssertEqual(alert!, "Please wait a while and re-launch the app")
+        }
+        
+        sut.initDetailFetch(ticketNumber: "1")
+        wait(for: [expect], timeout: 1.0)
+    }
+    
 }

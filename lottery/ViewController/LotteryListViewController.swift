@@ -18,11 +18,11 @@ class LotteryListViewController: UIViewController {
     }
     
     private func initViewModel() {
-        lotteryListViewModel.showAlertClosure = { [weak self] in
+        lotteryListViewModel.showAlertClosure = { [weak self] message in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.showAlert(alertMessage: self.lotteryListViewModel.alertMessage ?? "UNKOWN ERROR")
+                self.showAlert(alertMessage: message ?? "UNKOWN ERROR")
             }
         }
         

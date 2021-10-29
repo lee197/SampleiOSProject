@@ -8,22 +8,21 @@
 import Foundation
 
 class LotteryDetailViewModel {
-    var showAlertClosure: (()->())?
-    var updateDetailViewClosure: (()->())?
-    
+    var showAlertClosure: ((_ alertMessage: String?)->())?
+    var updateDetailViewClosure: ((_ lotteryDetailModel: LotteryDetailModel?)->())?
+    var ticketNumber: Int?
     private let apiClient: LotteryInfoFetchable
     private let lotteryCalculator: LotteryCalculatorProtocol
     private var alertMessage: String? {
         didSet {
-            showAlertClosure?()
+            showAlertClosure?(alertMessage)
         }
     }
     private var lotteryDetailModel: LotteryDetailModel? {
         didSet {
-            updateDetailViewClosure?()
+            updateDetailViewClosure?(lotteryDetailModel)
         }
     }
-
 
     init(apiClient:LotteryInfoFetchable = LotteryRepository(),
          lotteryCalculator: LotteryCalculatorProtocol = LotteryCalculator()) {

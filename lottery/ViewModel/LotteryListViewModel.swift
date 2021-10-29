@@ -14,20 +14,21 @@ enum UserAlertError:  String, Error {
 }
 
 class LotteryListViewModel {
-    var showAlertClosure: (()->())?
-    var reloadTableViewClosure: (()->())?
+    var showAlertClosure: ((_ alertMessage: String?)->())?
+    var reloadTableViewClosure: ((_ cellViewModels: [Int])->())?
+    var cellViewModels: [Int] = [] {
+        didSet {
+            reloadTableViewClosure?(cellViewModels)
+        }
+    }
     
     private let apiClient: LotteryInfoFetchable
     private var alertMessage: String? {
         didSet {
-            showAlertClosure?()
+            showAlertClosure?(alertMessage)
         }
     }
-    private var cellViewModels: [Int] = [] {
-        didSet {
-            reloadTableViewClosure?()
-        }
-    }
+
     
     init(apiClient:LotteryInfoFetchable = LotteryRepository()) {
         self.apiClient = apiClient
@@ -43,13 +44,5 @@ class LotteryListViewModel {
                 self.alertMessage = UserAlertError.serverError.rawValue
             }
         }
-    }
-    
-    func getNumberOfCells() -> Int {
-        return cellViewModels.count
-    }
-    
-    func getCellViewModel( at indexPath: IndexPath ) -> Int {
-        return cellViewModels[indexPath.row]
     }
 }

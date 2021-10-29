@@ -13,8 +13,8 @@ class LotteryListViewModelUnitTest: XCTestCase {
     var mocks: MockLotteryRepository!
     
     override func setUpWithError() throws {
-        sut = LotteryListViewModel()
         mocks = MockLotteryRepository()
+        sut = LotteryListViewModel.init(apiClient: mocks)
     }
     
     override func tearDownWithError() throws {
@@ -22,8 +22,29 @@ class LotteryListViewModelUnitTest: XCTestCase {
         mocks = nil
     }
     
-    func testFetchLotteryListSucceed() {}
+    func testFetchLotteryListSucceed() {
+        mocks.IsFetchLotteryListSucceeded = true
+        let expect = XCTestExpectation(description: "fetch successfully")
+
+        sut.reloadTableViewClosure = { info in
+            expect.fulfill()
+            XCTAssertEqual(info, [1,2,3,4,5])
+        }
+        
+        sut.initListFetch()
+        wait(for: [expect], timeout: 1.0)
+    }
     
-    func testFetchLotteryListFailed() {}
+    func testFetchLotteryListFailed() {
+        mocks.IsFetchLotteryListSucceeded = false
+        let expect = XCTestExpectation(description: "fetch failed")
+        sut.showAlertClosure = { alert in
+            expect.fulfill()
+            XCTAssertEqual(alert!, "Please wait a while and re-launch the app")
+        }
+        
+        sut.initListFetch()
+        wait(for: [expect], timeout: 1.0)
+    }
 
 }
