@@ -8,9 +8,9 @@
 import Foundation
 
 enum UserAlertError:  String, Error {
-    case userError = "Please make sure your network is working fine or re-launch the app"
-    case serverError = "Please wait a while and re-launch the app"
-    case unknownError = "Please try other items"
+    case networkError = "Please check your network and re-launch the app"
+    case serverError = "Server error, please try again"
+    case unknownError = "Unknow error"
 }
 
 class LotteryListViewModel {

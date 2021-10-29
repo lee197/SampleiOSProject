@@ -35,7 +35,16 @@ class LotteryListViewController: UIViewController {
         setupTableView()
     }
     
+    override open var shouldAutorotate: Bool {
+       return false
+    }
+
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+       return .portrait
+    }
+    
     private func setupTableView() {
+        self.title = "lotteries"
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -88,7 +97,7 @@ extension LotteryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let vc = LotteryDetailViewController()
+        let vc = LotteryResultViewController()
         vc.ticketNumber = lotteryListViewModel.LotteryNnumbers[indexPath.row]
         self.navigationController?.pushViewController(vc, animated: true)
     }

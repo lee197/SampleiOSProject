@@ -10,7 +10,7 @@ import Foundation
 
 class MockLotteryRepository: LotteryInfoFetchable {
     var IsFetchLotteryListSucceeded = false
-    var IsFetchLotteryDetailSucceeded = false
+    var IsFetchLotteryResultSucceeded = false
     
     func fetchLotteryList(complete completionHandler: @escaping (Result<LotteryListAPIModel, APIError>) -> Void) {
         if IsFetchLotteryListSucceeded {
@@ -20,9 +20,9 @@ class MockLotteryRepository: LotteryInfoFetchable {
         }
     }
     
-    func fetchLotteryDetails(with ticketNumber: String, complete completionHandler: @escaping (Result<LotteryDetailAPIModel, APIError>) -> Void) {
-        if IsFetchLotteryDetailSucceeded {
-            completionHandler(.success(MockLotteryDetailAPIModel().generateLotteryDetailModel(Int(ticketNumber)!)))
+    func fetchLotteryResults(with ticketNumber: String, complete completionHandler: @escaping (Result<LotteryResultAPIModel, APIError>) -> Void) {
+        if IsFetchLotteryResultSucceeded {
+            completionHandler(.success(MockLotteryResultAPIModel().generateLotteryResultModel(Int(ticketNumber)!)))
         } else {
             completionHandler(.failure(APIError.serverError))
         }
@@ -39,21 +39,21 @@ class MockLotteryListAPIModel {
     }
 }
 
-class MockLotteryDetailAPIModel {
-    func generateLotteryDetailModel(_ ticketNumber: Int) -> LotteryDetailAPIModel {
+class MockLotteryResultAPIModel {
+    func generateLotteryResultModel(_ ticketNumber: Int) -> LotteryResultAPIModel {
         switch ticketNumber {
         case 1:
-            return LotteryDetailAPIModel(id: ticketNumber, numbers: MockNumbers().tenEuroLottery())
+            return LotteryResultAPIModel(id: ticketNumber, numbers: MockNumbers().tenEuroLottery())
         case 2:
-            return LotteryDetailAPIModel(id: ticketNumber, numbers: MockNumbers().fiveEuroLottery())
+            return LotteryResultAPIModel(id: ticketNumber, numbers: MockNumbers().fiveEuroLottery())
         case 3:
-            return LotteryDetailAPIModel(id: ticketNumber, numbers: MockNumbers().zeroLottery())
+            return LotteryResultAPIModel(id: ticketNumber, numbers: MockNumbers().zeroLottery())
         case 4:
-            return LotteryDetailAPIModel(id: ticketNumber, numbers: MockNumbers().oneEuroLottery())
+            return LotteryResultAPIModel(id: ticketNumber, numbers: MockNumbers().oneEuroLottery())
         case 5:
-            return LotteryDetailAPIModel(id: ticketNumber, numbers: MockNumbers().corruptDataLottery())
+            return LotteryResultAPIModel(id: ticketNumber, numbers: MockNumbers().corruptDataLottery())
         default:
-            return LotteryDetailAPIModel(id: ticketNumber, numbers: MockNumbers().corruptDataLottery())
+            return LotteryResultAPIModel(id: ticketNumber, numbers: MockNumbers().corruptDataLottery())
         }
     }
 }

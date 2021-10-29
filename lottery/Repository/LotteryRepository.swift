@@ -8,8 +8,7 @@
 import Foundation
 
 enum APIError: Error {
-    case clientError(description: String)
-    case serverError
+    case networkError
     case noData
     case httpError(description: String)
     case dataDecodingError
@@ -17,7 +16,7 @@ enum APIError: Error {
 
 protocol LotteryInfoFetchable {
     func fetchLotteryList(complete completionHandler: @escaping (Result<LotteryListAPIModel, APIError>) -> Void)
-    func fetchLotteryDetails(with ticketNumber: String, complete completionHandler: @escaping (Result<LotteryDetailAPIModel, APIError>) -> Void)
+    func fetchLotteryResults(with ticketNumber: String, complete completionHandler: @escaping (Result<LotteryResultAPIModel, APIError>) -> Void)
 }
 
 class LotteryRepository {
@@ -37,14 +36,14 @@ extension LotteryRepository: LotteryInfoFetchable {
             return
         }
         
-        URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
-            if let networkError = error {
-                completionHandler(.failure(.clientError(description: networkError.localizedDescription)))
+        session.dataTask(with: URLRequest(url: url)) { data, response, error in
+            if let _ = error {
+                completionHandler(.failure(.networkError))
                 return
             }
             
             guard let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode else {
-                completionHandler(.failure(.serverError))
+                completionHandler(.failure(.networkError))
                 return
             }
             
@@ -63,21 +62,21 @@ extension LotteryRepository: LotteryInfoFetchable {
         }.resume()
     }
     
-    func fetchLotteryDetails(with ticketNumber: String, complete completionHandler: @escaping (Result<LotteryDetailAPIModel, APIError>) -> Void) {
-        guard let url = makeLotteryDetailComponents(ticketNumber).url else {
+    func fetchLotteryResults(with ticketNumber: String, complete completionHandler: @escaping (Result<LotteryResultAPIModel, APIError>) -> Void) {
+        guard let url = makeLotteryResultComponents(ticketNumber).url else {
             let error = APIError.httpError(description: "Couldn't create URL")
             completionHandler(.failure(error))
             return
         }
         
-        URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
-            if let networkError = error {
-                completionHandler(.failure(.clientError(description: networkError.localizedDescription)))
+        session.dataTask(with: URLRequest(url: url)) { data, response, error in
+            if let _ = error {
+                completionHandler(.failure(.networkError))
                 return
             }
             
             guard let response = response as? HTTPURLResponse, 200...299 ~= response.statusCode else {
-                completionHandler(.failure(.serverError))
+                completionHandler(.failure(.networkError))
                 return
             }
             
@@ -88,7 +87,7 @@ extension LotteryRepository: LotteryInfoFetchable {
             
             let decoder = JSONDecoder()
             do{
-                let value = try decoder.decode(LotteryDetailAPIModel.self, from: data)
+                let value = try decoder.decode(LotteryResultAPIModel.self, from: data)
                 completionHandler(.success(value))
             }catch{
                 completionHandler(.failure(.dataDecodingError))
@@ -110,7 +109,7 @@ private extension LotteryRepository {
         return creatComponent()
     }
     
-    func makeLotteryDetailComponents(_ ticketNumber: String) -> URLComponents {
+    func makeLotteryResultComponents(_ ticketNumber: String) -> URLComponents {
         var components = creatComponent()
         components.path = "/prod/ticket/\(ticketNumber)"
         return components

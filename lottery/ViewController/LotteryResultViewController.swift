@@ -1,5 +1,5 @@
 //
-//  LotteryDetailViewController.swift
+//  LotteryResultViewController.swift
 //  lottery
 //
 //  Created by Jason Lee on 29/10/2021.
@@ -7,18 +7,26 @@
 
 import UIKit
 
-class LotteryDetailViewController: UIViewController {
-    let lotteryDetailViewModel = LotteryDetailViewModel()
+class LotteryResultViewController: UIViewController {
+    let lotteryResultViewModel = LotteryResultViewModel()
     var ticketNumber: Int?
     let resultLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initViewModel()
-        setupDetailView()
+        setupResultView()
     }
     
-    private func setupDetailView() {
+    override open var shouldAutorotate: Bool {
+       return false
+    }
+
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+       return .portrait
+    }
+    
+    private func setupResultView() {
         self.view.backgroundColor = .white
 
         let numberLabel = UILabel()
@@ -56,7 +64,7 @@ class LotteryDetailViewController: UIViewController {
     }
     
     private func initViewModel() {
-        lotteryDetailViewModel.showAlertClosure = { [weak self] message in
+        lotteryResultViewModel.showAlertClosure = { [weak self] message in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -64,7 +72,7 @@ class LotteryDetailViewController: UIViewController {
             }
         }
         
-        lotteryDetailViewModel.updateDetailViewClosure = { info in
+        lotteryResultViewModel.updateResultViewClosure = { info in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self, let info = info else { return }
                 self.resultLabel.text = "You won: " + "€" + info.result
@@ -72,13 +80,16 @@ class LotteryDetailViewController: UIViewController {
         }
         
         guard let ticketNumber = ticketNumber else { return }
-        lotteryDetailViewModel.initDetailFetch(ticketNumber: String(ticketNumber))
+        lotteryResultViewModel.initResultFetch(ticketNumber: String(ticketNumber))
     }
     
     private func showAlert(alertMessage:String) {
         let alert = UIAlertController(title: "Alert", message: alertMessage, preferredStyle: .alert)
-        alert.addAction( UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+        alert.addAction( UIAlertAction(title: "Ok", style: .cancel, handler: popBack))
         self.present(alert, animated: true, completion: nil)
     }
     
+    private func popBack(alert: UIAlertAction!) {
+        _ = navigationController?.popViewController(animated: true)
+    }
 }

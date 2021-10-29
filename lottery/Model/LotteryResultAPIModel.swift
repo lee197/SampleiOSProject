@@ -1,5 +1,5 @@
 //
-//  LotteryDetailModel.swift
+//  LotteryResultModel.swift
 //  lottery
 //
 //  Created by Jason Lee on 29/10/2021.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-// MARK: - LotteryDetailModel
-struct LotteryDetailAPIModel: Codable {
+// MARK: - LotteryResultModel
+struct LotteryResultAPIModel: Codable {
     let id: Int
     let numbers: [Int]
 }
