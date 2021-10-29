@@ -6,27 +6,72 @@
 //
 
 import XCTest
+@testable import lottery
 
 class LotteryCalculatorUnitTest: XCTestCase {
-
+    var sut: LotteryCalculator!
+    var mocks: MockNumbers!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        sut = LotteryCalculator()
+        mocks = MockNumbers()
     }
-
+    
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        sut = nil
+        mocks = nil
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    func testFiveEuroLottery() {
+        let result = try? sut.findLotteryAmount(numbers: mocks.fiveEuroLottery())
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result, 5)
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testTenEuroLottery() {
+        let result = try? sut.findLotteryAmount(numbers: mocks.tenEuroLottery())
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result, 10)
+    }
+    
+    func testOneEuroLottery() {
+        let result = try? sut.findLotteryAmount(numbers: mocks.oneEuroLottery())
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result, 1)
+    }
+    
+    func testZeroEuroLottery() {
+        let result = try? sut.findLotteryAmount(numbers: mocks.zeroLottery())
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result, 0)
+    }
+    
+    func testCorruptDataLottery() {
+        XCTAssertThrowsError(try sut.findLotteryAmount(numbers: mocks.corruptDataLottery())) { error in
+            XCTAssertEqual(error as? LotteryRuleError, LotteryRuleError.valuesCountError)
         }
     }
+}
 
+class MockNumbers {
+    
+    func fiveEuroLottery() -> [Int] {
+        return [1,1,1]
+    }
+    
+    func tenEuroLottery() -> [Int] {
+        return [1,1,0]
+    }
+    
+    func oneEuroLottery() -> [Int] {
+        return [2,1,0]
+    }
+    
+    func zeroLottery() -> [Int] {
+        return [1,1,2]
+    }
+    
+    func corruptDataLottery() -> [Int] {
+        return [1,1]
+    }
 }
