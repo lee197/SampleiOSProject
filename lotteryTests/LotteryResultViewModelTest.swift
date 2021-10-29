@@ -11,10 +11,16 @@ import XCTest
 class LotteryResultViewModelTest: XCTestCase {
     var sut: LotteryResultViewModel!
     var mocks: MockLotteryRepository!
-    
+    var userDefaults: UserDefaults!
+
     override func setUpWithError() throws {
         mocks = MockLotteryRepository()
-        sut = LotteryResultViewModel.init(apiClient: mocks, lotteryCalculator: LotteryCalculator())
+        userDefaults = UserDefaults(suiteName: "fake_file")
+        userDefaults.removePersistentDomain(forName: "fake_file")
+        
+        sut = LotteryResultViewModel(apiClient: mocks,
+                                     lotteryCalculator: LotteryCalculator(),
+                                     userDefault: userDefaults)
     }
     
     override func tearDownWithError() throws {
@@ -25,10 +31,13 @@ class LotteryResultViewModelTest: XCTestCase {
     func testFetchLotteryResultSucceed() {
         mocks.IsFetchLotteryResultSucceeded = true
         let expect = XCTestExpectation(description: "fetch successfully")
-        sut.updateResultViewClosure = { info in
+        sut.updateResultViewClosure = { [weak self] info in
+            guard let self = self else { return }
             expect.fulfill()
             XCTAssertEqual(info!.id, 1)
             XCTAssertEqual(info!.result, "10")
+            let val = self.userDefaults.integer(forKey: "totalAmount")
+            XCTAssertEqual(val, 10)
         }
         
         sut.initResultFetch(ticketNumber: "1")
@@ -40,7 +49,7 @@ class LotteryResultViewModelTest: XCTestCase {
         let expect = XCTestExpectation(description: "fetch failed")
         sut.showAlertClosure = { alert in
             expect.fulfill()
-            XCTAssertEqual(alert!, "Please wait a while and re-launch the app")
+            XCTAssertEqual(alert!, "Server error, please try again")
         }
         
         sut.initResultFetch(ticketNumber: "1")

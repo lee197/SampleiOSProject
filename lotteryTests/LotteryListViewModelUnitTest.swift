@@ -11,10 +11,15 @@ import XCTest
 class LotteryListViewModelUnitTest: XCTestCase {
     var sut: LotteryListViewModel!
     var mocks: MockLotteryRepository!
+    var userDefaults: UserDefaults!
     
     override func setUpWithError() throws {
+        userDefaults = UserDefaults(suiteName: "fake_file")
+        userDefaults.removePersistentDomain(forName: "fake_file")
+        
         mocks = MockLotteryRepository()
-        sut = LotteryListViewModel.init(apiClient: mocks)
+        sut = LotteryListViewModel(apiClient: mocks,
+                                   userDefault: userDefaults)
     }
     
     override func tearDownWithError() throws {
@@ -35,12 +40,26 @@ class LotteryListViewModelUnitTest: XCTestCase {
         wait(for: [expect], timeout: 1.0)
     }
     
+    func testGetFromLocalStorage() {
+        mocks.IsFetchLotteryListSucceeded = true
+        userDefaults.set(10, forKey: "totalAmount")
+        let expect = XCTestExpectation(description: "get local amount successfully")
+
+        sut.refreshTotalAmount = { amount in
+            expect.fulfill()
+            XCTAssertEqual(amount, 10)
+        }
+        
+        sut.initListFetch()
+        wait(for: [expect], timeout: 1.0)
+    }
+    
     func testFetchLotteryListFailed() {
         mocks.IsFetchLotteryListSucceeded = false
         let expect = XCTestExpectation(description: "fetch failed")
         sut.showAlertClosure = { alert in
             expect.fulfill()
-            XCTAssertEqual(alert!, "Please wait a while and re-launch the app")
+            XCTAssertEqual(alert!, "Server error, please try again")
         }
         
         sut.initListFetch()

@@ -41,9 +41,9 @@ class LotteryResultViewModel {
             case .success(let lottery):
                 do {
                     let value = try self.lotteryCalculator.findLotteryAmount(numbers: lottery.numbers)
-                    self.lotteryResultModel = LotteryResultModel(id: lottery.id, result: String(value))
                     let oldTotal = self.userDefault.integer(forKey: "totalAmount")
                     self.userDefault.set(oldTotal + value, forKey: "totalAmount")
+                    self.lotteryResultModel = LotteryResultModel(id: lottery.id, result: String(value))
                 } catch {
                     self.alertMessage = UserAlertError.unknownError.rawValue
                 }

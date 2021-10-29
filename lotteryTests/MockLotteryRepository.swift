@@ -16,7 +16,7 @@ class MockLotteryRepository: LotteryInfoFetchable {
         if IsFetchLotteryListSucceeded {
             completionHandler(.success(MockLotteryListAPIModel().generateLotteryList()))
         } else {
-            completionHandler(.failure(APIError.serverError))
+            completionHandler(.failure(APIError.networkError))
         }
     }
     
@@ -24,7 +24,7 @@ class MockLotteryRepository: LotteryInfoFetchable {
         if IsFetchLotteryResultSucceeded {
             completionHandler(.success(MockLotteryResultAPIModel().generateLotteryResultModel(Int(ticketNumber)!)))
         } else {
-            completionHandler(.failure(APIError.serverError))
+            completionHandler(.failure(APIError.networkError))
         }
     }
 }
