@@ -39,17 +39,21 @@ class LotteryResultViewModel {
             guard let self = self else { return }
             switch result {
             case .success(let lottery):
-                do {
-                    let value = try self.lotteryCalculator.findLotteryAmount(numbers: lottery.numbers)
-                    let oldTotal = self.userDefault.integer(forKey: "totalAmount")
-                    self.userDefault.set(oldTotal + value, forKey: "totalAmount")
-                    self.lotteryResultModel = LotteryResultModel(id: lottery.id, result: String(value))
-                } catch {
-                    self.alertMessage = UserAlertError.unknownError.rawValue
-                }
+                self.processLotteryResult(lottery)
             case .failure(_ ):
-                self.alertMessage = UserAlertError.serverError.rawValue
+                self.alertMessage = UserAlertError.serverError.description
             }
+        }
+    }
+    
+    private func processLotteryResult(_ lottery: LotteryResultAPIModel) {
+        do {
+            let newValue = try self.lotteryCalculator.findLotteryAmount(numbers: lottery.numbers)
+            let oldTotal = self.userDefault.integer(forKey: UserDefaultKey.totalAmount.rawValue)
+            self.userDefault.set(oldTotal + newValue, forKey: UserDefaultKey.totalAmount.rawValue)
+            self.lotteryResultModel = LotteryResultModel(id: lottery.id, result: String(newValue))
+        } catch {
+            self.alertMessage = UserAlertError.unknownError.description
         }
     }
 }

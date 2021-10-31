@@ -7,10 +7,18 @@
 
 import Foundation
 
-enum UserAlertError:  String, Error {
-    case networkError = "Please check your network and re-launch the app"
-    case serverError = "Server error, please try again"
-    case unknownError = "Unknow error"
+enum UserAlertError:  CustomStringConvertible, Error {
+    case networkError
+    case serverError
+    case unknownError
+    
+    var description : String {
+        switch self {
+        case .networkError: return ErrorConstant.networkError
+        case .serverError: return ErrorConstant.serverError
+        case .unknownError: return ErrorConstant.unknownError
+        }
+    }
 }
 
 class LotteryListViewModel {
@@ -49,14 +57,25 @@ class LotteryListViewModel {
             switch result {
             case .success(let lotteries):
                 self.LotteryNnumbers = lotteries.tickets.map{ $0.id }
-                self.totalAmount = self.userDefault.integer(forKey: "totalAmount")
+                self.totalAmount = self.userDefault.integer(forKey: UserDefaultKey.totalAmount.rawValue)
             case .failure(_ ):
-                self.alertMessage = UserAlertError.serverError.rawValue
+                self.alertMessage = UserAlertError.serverError.description
             }
         }
     }
     
     func updateTotalAmount() {
-        self.totalAmount = self.userDefault.integer(forKey: "totalAmount")
+        self.totalAmount = self.userDefault.integer(forKey: UserDefaultKey.totalAmount.rawValue)
     }
+}
+
+enum UserDefaultKey: String {
+    case totalAmount
+}
+
+class ErrorConstant {
+    static let networkError = "Please check your network and re-launch the app"
+    static let serverError = "Server error, please try again"
+    static let unknownError = "Unknow error"
+    static let httpError = "Couldn't create URL"
 }
