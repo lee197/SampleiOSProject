@@ -67,6 +67,10 @@ class LotteryListViewModel {
     func updateTotalAmount() {
         self.totalAmount = self.userDefault.integer(forKey: UserDefaultKey.totalAmount.rawValue)
     }
+    
+    func getTotalAmount() -> String {
+        return "Total amount: \(self.userDefault.integer(forKey: UserDefaultKey.totalAmount.rawValue))"
+    }
 }
 
 enum UserDefaultKey: String {

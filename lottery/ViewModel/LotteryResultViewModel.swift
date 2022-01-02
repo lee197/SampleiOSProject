@@ -8,14 +8,14 @@
 import Foundation
 
 class LotteryResultViewModel {
-    var showAlertClosure: ((_ alertMessage: String?)->())?
+    // output
+    var showAlertClosure: ((_ alertMessage: String)->())?
     var updateResultViewClosure: ((_ lotteryResultModel: LotteryResultModel?)->())?
-    var ticketNumber: Int?
     private let apiClient: LotteryInfoFetchable
     private let lotteryCalculator: LotteryCalculatorProtocol
     private let userDefault: UserDefaults
 
-    private var alertMessage: String? {
+    private var alertMessage: String = "" {
         didSet {
             showAlertClosure?(alertMessage)
         }
@@ -33,7 +33,7 @@ class LotteryResultViewModel {
         self.lotteryCalculator = lotteryCalculator
         self.userDefault = userDefault
     }
-    
+    // input
     func initResultFetch(ticketNumber: String) {
         apiClient.fetchLotteryResults(with: ticketNumber) { [weak self] result in
             guard let self = self else { return }

@@ -76,7 +76,8 @@ class LotteryListViewController: UIViewController {
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.title = "Total amount: \(amount)"
+                self.title = self.lotteryListViewModel.getTotalAmount()
+                
             }
         }
         
